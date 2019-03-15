@@ -60,7 +60,7 @@ def check_object(index, missing_msg=None, expand_msg=None, state=None, typestr="
         There is no robust way to verify whether `my_list = [0]` was coded correctly in a separate way.
         The best SCT would look something like this: ::
 
-            msg = "您是否正确初始化了 `my_list`?"
+            msg = "Have you correctly initialized `my_list`?"
             Ex().check_correct(
                 check_object('my_list').has_equal_value(),
                 multi(
@@ -154,10 +154,10 @@ def check_object(index, missing_msg=None, expand_msg=None, state=None, typestr="
         state.assert_root('check_object', extra_msg=extra_msg)
 
     if missing_msg is None:
-        missing_msg = "你是否无误地定义了 {{typestr}} `{{index}}`?"
+        missing_msg = "Did you define the {{typestr}} `{{index}}` without errors?"
 
     if expand_msg is None:
-        expand_msg = "你是否正确定义了 {{typestr}} `{{index}}`? "
+        expand_msg = "Did you correctly define the {{typestr}} `{{index}}`? "
 
     rep = Reporter.active_reporter
 
