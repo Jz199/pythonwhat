@@ -648,8 +648,8 @@ scts = {}
 
 # make has_equal_part wrappers
 
-scts['has_equal_name'] = partial(has_equal_part, 'name', msg='Make sure to use the correct {{name}}, was expecting {{sol_part[name]}}, instead got {{stu_part[name]}}.')
-scts['is_default'] = partial(has_equal_part, 'is_default', msg="Make sure it {{ 'has' if sol_part.is_default else 'does not have'}} a default argument.")
+scts['has_equal_name'] = partial(has_equal_part, 'name', msg='请务必使用正确的{{name}}，期待得到{{sol_part [name]}}，而不是{{stu_part [name]}}。')
+scts['is_default'] = partial(has_equal_part, 'is_default', msg="确保{{ 'has' if sol_part.is_default else 'does not have'}}默认参数。")
 
 # include rest of wrappers
 for k, v in __PART_WRAPPERS__.items():
