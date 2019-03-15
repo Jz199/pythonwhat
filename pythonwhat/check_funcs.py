@@ -1,3 +1,5 @@
+# -*- coding: UTF-8 -*-
+
 from pythonwhat.tasks import getResultInProcess, getOutputInProcess, getErrorInProcess, ReprFail, setUpNewEnvInProcess, breakDownNewEnvInProcess
 from pythonwhat.has_funcs import has_part
 from pythonwhat.check_logic import multi
@@ -46,8 +48,8 @@ def check_part(name, part_msg,
                state=None):
     """Return child state with name part as its ast tree"""
 
-    if missing_msg is None: missing_msg = "Are you sure you defined the {{part}}? "
-    if expand_msg is None: expand_msg = "Did you correctly specify the {{part}}? "
+    if missing_msg is None: missing_msg = "你确定你定义了{{part}}？"
+    if expand_msg is None: expand_msg = "你有没有正确指定{{part}}？"
 
     if not part_msg: part_msg = name
     append_message = {'msg': expand_msg, 'kwargs': { 'part': part_msg }}
@@ -74,8 +76,8 @@ def check_part_index(name, index, part_msg,
     - a list of indices (which can be integer or string), in which case the student parts are indexed step by step.
     """
 
-    if missing_msg is None: missing_msg = "Are you sure you defined the {{part}}? "
-    if expand_msg is None: expand_msg = "Did you correctly specify the {{part}}? "
+    if missing_msg is None: missing_msg = "你确定你定义了{{part}}？"
+    if expand_msg is None: expand_msg = "你有没有正确指定{{part}}？"
 
     # create message
     ordinal = get_ord(index+1) if isinstance(index, int) else ""
@@ -117,8 +119,8 @@ def check_node(name,
                expand_msg=None,
                state=None):
 
-    if missing_msg is None: missing_msg = "The system wants to check the {{typestr}} but hasn't found it."
-    if expand_msg is None: expand_msg = "Check the {{typestr}}. "
+    if missing_msg is None: missing_msg = "系统要检查{{typestr}}，尚未找到{{typestr}}。"
+    if expand_msg is None: expand_msg = "检查{{typestr}}。"
 
     rep = Reporter.active_reporter
     stu_out = getattr(state, 'student_'+name)
@@ -234,18 +236,18 @@ def check_args(name, missing_msg=None, state=None):
 
     """
     if missing_msg is None:
-        missing_msg = 'Did you specify the {{part}}?'
+        missing_msg = '您是否指定了{{part}}？'
 
     if name in ['*args', '**kwargs']: # for check_function_def
         return check_part(name, name, state=state, missing_msg = missing_msg)
     else:
         if isinstance(name, list): # dealing with args or kwargs
             if name[0] == 'args':
-                arg_str = "%s argument passed as a variable length argument"%get_ord(name[1]+1)
+                arg_str = "%s参数作为可变长度参数传递"%get_ord(name[1]+1)
             else:
-                arg_str = "argument `%s`"%name[1]
+                arg_str = "参数`%s`"%name[1]
         else:
-            arg_str = "%s argument" % get_ord(name+1) if isinstance(name, int) else "argument `%s`" % name
+            arg_str = "%s参数" % get_ord(name+1) if isinstance(name, int) else "参数`%s`" % name
         return check_part_index('args', name, arg_str, missing_msg = missing_msg, state=state)
 
 
@@ -271,7 +273,7 @@ def fix_format(arguments):
         arguments = {'args': arguments, 'kwargs': {}}
 
     if not isinstance(arguments, dict) or 'args' not in arguments or 'kwargs' not in arguments:
-        raise ValueError("Wrong format of arguments in 'results', 'outputs' or 'errors'; either a list, or a dictionary with names args (a list) and kwargs (a dict)")
+        raise ValueError("“结果”，“输出”或“错误”中的参数格式错误; 要么是列表，要么是带有名称args（列表）和kwargs（字典）的字典")
 
     return(arguments)
 
@@ -297,14 +299,14 @@ def run_call(args, node, process, get_func, **kwargs):
         func_expr = ast.Name(id=node.name, ctx=ast.Load())
     elif isinstance(node, ast.Lambda):                        # lambda body expr
         func_expr = node
-    else: raise InstructorError("Only function definition or lambda may be called")
+    else: raise InstructorError("只能调用函数定义或lambda")
 
     ast.fix_missing_locations(func_expr)
     return get_func(process = process, tree=func_expr, call = args, **kwargs)
 
-MSG_CALL_INCORRECT = "Calling {{argstr}} should {{action}} `{{str_sol}}`, instead got {{str_stu if str_stu == 'no printouts' else '`' + str_stu + '`'}}."
-MSG_CALL_ERROR     = "Calling {{argstr}} should {{action}} `{{str_sol}}`, instead it errored out: `{{str_stu}}`."
-MSG_CALL_ERROR_INV = "Calling {{argstr}} should {{action}} `{{str_sol}}`, instead got `{{str_stu}}`."
+MSG_CALL_INCORRECT = "调用{{argstr}}应该{{action}}`{{str_sol}}`，而不是{{str_stu if str_stu == 'no printouts' else '`' + str_stu + '`'}}."
+MSG_CALL_ERROR     = "调用{{argstr}}应该{{action}}`{{str_sol}}`，而不是出错：`{{str_stu}}`。"
+MSG_CALL_ERROR_INV = "调用{{argstr}}应该{{action}}`{{str_sol}}`，而不是`{{str_stu}}`。"
 def call(args,
          test='value',
          incorrect_msg=None,
@@ -330,12 +332,12 @@ def call(args,
     eval_sol, str_sol = run_call(args, state.solution_parts['node'], state.solution_process, get_func, **kwargs)
 
     if (test == 'error') ^ isinstance(eval_sol, Exception):
-        _msg = state.build_message("Calling {{argstr}} resulted in an error (or not an error if testing for one). Error message: {{type_err}} {{str_sol}}",
+        _msg = state.build_message("调用{{argstr}}会导致错误（如果测试错误则不会出错）。错误提示：{{type_err}} {{str_sol}}",
                                    dict(type_err=type(eval_sol), str_sol=str_sol, argstr=argstr)),
         raise InstructorError(_msg)
 
     if isinstance(eval_sol, ReprFail):
-        _msg = state.build_message("Can't get the result of calling {{argstr}}: {{eval_sol.info}}",
+        _msg = state.build_message("无法获得调用{{argstr}}的结果：{{eval_sol.info}}",
                                    dict(argstr = argstr, eval_sol=eval_sol))
         raise InstructorError(_msg)
 
@@ -363,7 +365,7 @@ def build_call(callstr, node):
         argstr = "`%s`" % callstr.replace('f', node.name)
     elif isinstance(node, ast.Lambda): # lambda body expr
         func_expr = node
-        argstr = 'it with the arguments `%s`' % callstr.replace('f', '')
+        argstr = '它带有参数`%s`' % callstr.replace('f', '')
     else:
         raise TypeError("Can't handle AST that is passed.")
 
@@ -406,7 +408,7 @@ def check_call(callstr, argstr = None, expand_msg=None, state=None):
     )
 
     if expand_msg is None:
-        expand_msg = "To verify it, we reran {{argstr}}. "
+        expand_msg = "为了验证它，我们重新{{argstr}}。"
 
     stu_part, _argstr = build_call(callstr, state.student_parts['node'])
     sol_part, _ = build_call(callstr, state.solution_parts['node'])
