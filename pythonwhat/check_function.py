@@ -1,3 +1,5 @@
+# -*- coding: UTF-8 -*-
+
 from pythonwhat.Reporter import Reporter
 from pythonwhat.check_funcs import part_to_child, StubState
 from pythonwhat.tasks import getSignatureInProcess
