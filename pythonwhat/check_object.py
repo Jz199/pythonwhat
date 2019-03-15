@@ -1,3 +1,5 @@
+# -*- coding: UTF-8 -*-
+
 from pythonwhat.parsing import ObjectAssignmentParser
 from pythonwhat.Test import DefinedProcessTest, InstanceProcessTest, DefinedCollProcessTest
 from pythonwhat.Reporter import Reporter
@@ -60,7 +62,7 @@ def check_object(index, missing_msg=None, expand_msg=None, state=None, typestr="
         There is no robust way to verify whether `my_list = [0]` was coded correctly in a separate way.
         The best SCT would look something like this: ::
 
-            msg = "ÄúÊÇ·ñÕıÈ·³õÊ¼»¯ÁË `my_list`?"
+            msg = "æ‚¨æ˜¯å¦æ­£ç¡®åˆå§‹åŒ–äº† `my_list`?"
             Ex().check_correct(
                 check_object('my_list').has_equal_value(),
                 multi(
@@ -154,10 +156,10 @@ def check_object(index, missing_msg=None, expand_msg=None, state=None, typestr="
         state.assert_root('check_object', extra_msg=extra_msg)
 
     if missing_msg is None:
-        missing_msg = "ÄãÊÇ·ñÎŞÎóµØ¶¨ÒåÁË {{typestr}} `{{index}}`?"
+        missing_msg = "ä½ æ˜¯å¦æ— è¯¯åœ°å®šä¹‰äº† {{typestr}} `{{index}}`?"
 
     if expand_msg is None:
-        expand_msg = "ÄãÊÇ·ñÕıÈ·¶¨ÒåÁË {{typestr}} `{{index}}`? "
+        expand_msg = "ä½ æ˜¯å¦æ­£ç¡®å®šä¹‰äº† {{typestr}} `{{index}}`? "
 
     rep = Reporter.active_reporter
 
